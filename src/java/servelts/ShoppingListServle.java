@@ -29,6 +29,12 @@ public class ShoppingListServle extends HttpServlet {
             throws ServletException, IOException {
        HttpSession session = request.getSession();
        String username = (String)session.getAttribute("username");
+       String logout = request.getParameter("logout");
+        if(logout != null){
+            session.invalidate();
+            session = request.getSession();
+            getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+        }
         if( username != null){
              getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").forward(request, response);
             return;
@@ -40,21 +46,38 @@ public class ShoppingListServle extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+            String item =request.getParameter("item");
         HttpSession session = request.getSession();
         if(request.getParameter("register")!=null){
             String username =request.getParameter("username");
             session.setAttribute("username", username);
             ArrayList<String> items = null;
             session.setAttribute("items", items);
-            response.sendRedirect("ShoppingList");
+         getServletContext().getRequestDispatcher("/WEB-INF/shoppingList.jsp").forward(request, response);
         }
         else if(request.getParameter("add")!=null){
-            String item =request.getParameter("item");
-             ArrayList<String> items = (ArrayList<String>)session.getAttribute("items");
-             items.add(item);
+            ArrayList<String> items=new ArrayList<>();
+            if((ArrayList<String>)session.getAttribute("items")!=null)
+            items =(ArrayList<String>)session.getAttribute("items") ;
+            else
+                items=new ArrayList<>();
+            items.add(item);
              session.setAttribute("items", items);
+              response.sendRedirect("ShoppingList");
         }
-        
+           else if(request.getParameter("delete")!=null){
+               String deleteitem =request.getParameter("ttem");
+            ArrayList<String> items=new ArrayList<>();
+            if((ArrayList<String>)session.getAttribute("items")!=null)
+            items =(ArrayList<String>)session.getAttribute("items") ;
+            else
+                items=new ArrayList<>();
+            items.remove(deleteitem);
+            
+             session.setAttribute("items", items);
+              response.sendRedirect("ShoppingList");
+        }
         }
     }
 

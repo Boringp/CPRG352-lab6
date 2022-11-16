@@ -28,12 +28,10 @@
                   <c:param name='delete' value='' /></c:url>">
                 
               <c:forEach items="${items}" var="item">
-                <tr>
-                    <td>${item}</td>
-                    
-                </tr>
+                  <div> <input type="radio" name="ttem" value="${item}" />
+                      <label >${item}</label></div>
             </c:forEach>        
-                
+               <input type="submit" value="delete"> 
             </form>
         </div>
             
